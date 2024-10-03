@@ -12,16 +12,16 @@ public class StageController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += new Vector3(-speed*Time.deltaTime,0,0);
+        transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
     }
 
-    private void Stage00(float x, float y,float z)
+    private void Stage00(float x, float y, float z)
     {
         GameObject Stage_prefab = Resources.Load<GameObject>("Stage00");
         GameObject Stage = Instantiate(Stage_prefab, new Vector3(x, y, z), Quaternion.identity);
@@ -32,7 +32,7 @@ public class StageController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("DestroyObject"))
         {
-            Stage00(spawnPointX, spawnPointY,spawnPointZ);
+            Stage00(spawnPointX, spawnPointY, spawnPointZ);
             Destroy(this.gameObject);
         }
     }
