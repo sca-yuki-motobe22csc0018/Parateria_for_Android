@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     //位置関係
     public float DefaultPosition;
     public float PlayerSpeed;
+    public float EndPositionY;
+    //デバック用
+    public float StartPositionY;
 
     //ジャンプ関連
     public float JumpForce;
@@ -17,10 +20,16 @@ public class PlayerController : MonoBehaviour
     private int thisJumpCount;
     private bool onWall;
 
+    //見た目関連
+    public GameObject PlayerSkin;
+    public float RotaSpeed;
+    private bool Rota;
+
     // Start is called before the first frame update
     void Start()
     {
         onWall = false;
+        Rota=true;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -31,11 +40,32 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector3(0, JumpForce, 0);
             thisJumpCount++;
+            Rota = true;
         }
         if (this.transform.position.x < DefaultPosition)
         {
             this.transform.position += new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
         }
+        if (this.transform.position.x > DefaultPosition)
+        {
+            this.transform.position -= new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
+        }
+        if (Rota)
+        {
+            PlayerSkin.transform.Rotate(0,0,-RotaSpeed*Time.deltaTime);
+        }
+        if (this.transform.position.y < EndPositionY)
+        {
+            this.transform.position+=new Vector3(0,StartPositionY,0);
+        }
+        Line();
+    }
+
+    private void Line()
+    {
+        GameObject Stage_prefab = Resources.Load<GameObject>("Line");
+        GameObject Stage = Instantiate(Stage_prefab, this.transform.position, Quaternion.identity);
+        return;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -43,6 +73,8 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Stage")&&!onWall)
         {
             thisJumpCount = 0;
+            PlayerSkin.transform.rotation = Quaternion.identity;
+            Rota = false;
         }
     }
 
@@ -56,6 +88,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (collision.gameObject.CompareTag("Stage") && !onWall)
+        {
+            thisJumpCount = 0;
+        }
         if (collision.gameObject.CompareTag("Wall"))
         {
             onWall = false;

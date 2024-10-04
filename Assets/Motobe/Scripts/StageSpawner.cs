@@ -40,5 +40,9 @@ public class StageSpawner : MonoBehaviour
             }
             Destroy(collision.gameObject);
         }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }
