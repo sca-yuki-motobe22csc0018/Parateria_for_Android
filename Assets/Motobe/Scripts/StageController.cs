@@ -5,35 +5,16 @@ using UnityEngine;
 
 public class StageController : MonoBehaviour
 {
-    public float speed;
-    /*
-    public float defaultSpeed;
+    float speed;
+    GameController controller;
 
-    public float plusSpeed;
-    private float speed;
-    private float timer;
-    public float SpeedUpTime;
-    */
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        /*
-        speed = defaultSpeed;
-        timer = 0;
-        */
+        controller = FindObjectOfType<GameController>();
+        speed = controller.StageSpeed;
     }
-
-    // Update is called once per frame
     void Update()
     {
-        /*
-        timer += Time.deltaTime;
-        if (timer > SpeedUpTime)
-        {
-            timer = 0;
-            speed += plusSpeed;
-        }
-        */
         transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
     }
 

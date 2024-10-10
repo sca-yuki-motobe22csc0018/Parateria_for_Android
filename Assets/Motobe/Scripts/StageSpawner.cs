@@ -11,6 +11,9 @@ public class StageSpawner : MonoBehaviour
     public float spawnPointX;
     public float spawnPointY;
     public float spawnPointZ;
+    public string RespawnTag;
+    public string LineTag;
+    public string StagePrefab;
     void Start()
     {
         for (int i = 0; i < stageAmount; i++)
@@ -20,13 +23,13 @@ public class StageSpawner : MonoBehaviour
     }
     private void Stage(float x, float y, float z, int num)
     {
-        GameObject Stage_prefab = Resources.Load<GameObject>("Stage0" + num);
+        GameObject Stage_prefab = Resources.Load<GameObject>(StagePrefab + num);
         GameObject Stage = Instantiate(Stage_prefab, new Vector3(x, y, z), Quaternion.identity);
         return;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Respawn"))
+        if (collision.gameObject.CompareTag(RespawnTag))
         {
             int Rand = Random.Range(0, spawnRandom);
             for (int i = 0; i < stageAmount; i++)
@@ -40,7 +43,7 @@ public class StageSpawner : MonoBehaviour
             }
             Destroy(collision.gameObject);
         }
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag(LineTag))
         {
             Destroy(collision.gameObject);
         }

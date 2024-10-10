@@ -19,11 +19,18 @@ public class PlayerController : MonoBehaviour
     public int MaxJumpCount;
     private int thisJumpCount;
     private bool onWall;
+    public string StageTag;
+    public string WallTag;
+    public string GiriJumpTag;
+    public string GiriGiriJumpTag;
+    private bool Jump;
+    private bool GiriGiri;
 
     //Œ©‚½–ÚŠÖ˜A
     public GameObject PlayerSkin;
     public float RotaSpeed;
     private bool Rota;
+    public string LinePrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +38,8 @@ public class PlayerController : MonoBehaviour
         onWall = false;
         Rota=true;
         rb = GetComponent<Rigidbody2D>();
+        Jump = false;
+        GiriGiri = false;
     }
 
     // Update is called once per frame
@@ -41,6 +50,8 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(0, JumpForce, 0);
             thisJumpCount++;
             Rota = true;
+            Jump = true;
+            
         }
         if (this.transform.position.x < DefaultPosition)
         {
@@ -63,24 +74,49 @@ public class PlayerController : MonoBehaviour
 
     private void Line()
     {
-        GameObject Stage_prefab = Resources.Load<GameObject>("Line");
+        GameObject Stage_prefab = Resources.Load<GameObject>(LinePrefab);
         GameObject Stage = Instantiate(Stage_prefab, this.transform.position, Quaternion.identity);
         return;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Stage")&&!onWall)
+        if (collision.gameObject.CompareTag(StageTag)&&!onWall)
         {
             thisJumpCount = 0;
             PlayerSkin.transform.rotation = Quaternion.identity;
             Rota = false;
+            Jump = false;
         }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        
+        if (collision.gameObject.CompareTag(GiriJumpTag) && Jump)
+        {
+            if (GiriGiri)
+            {
+                Debug.Log("ƒMƒŠƒMƒŠ");
+                Jump = false;
+            }
+            else
+            {
+                Debug.Log("ƒMƒŠ");
+                Jump = false;
+            }
+            Destroy(collision.gameObject);
+        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag(GiriGiriJumpTag))
+        {
+            GiriGiri = true;
+        }
+        if (collision.gameObject.CompareTag(WallTag))
         {
             onWall = true;
         }
@@ -88,13 +124,17 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Stage") && !onWall)
+        if (collision.gameObject.CompareTag(StageTag) && !onWall)
         {
             thisJumpCount = 0;
         }
-        if (collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag(WallTag))
         {
             onWall = false;
+        }
+        if (collision.gameObject.CompareTag(GiriGiriJumpTag))
+        {
+            GiriGiri = false;
         }
     }
 }

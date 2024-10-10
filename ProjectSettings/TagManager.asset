@@ -6,15 +6,18 @@ TagManager:
   tags:
   - Stage
   - Wall
+  - GiriJumpPoint
+  - Enemy
+  - GiriGiriJumpPoint
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
   - Stage
-  - 
+  - Player
   - 
   - 
   - 
