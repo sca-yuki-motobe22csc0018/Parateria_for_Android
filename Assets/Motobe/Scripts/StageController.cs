@@ -11,10 +11,11 @@ public class StageController : MonoBehaviour
     private void Start()
     {
         controller = FindObjectOfType<GameController>();
-        speed = controller.StageSpeed;
+        
     }
     void Update()
     {
+        speed = controller.StageSpeed;
         transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
     }
 

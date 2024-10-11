@@ -19,12 +19,13 @@ public class EnemyController : MonoBehaviour
         MoveStart = false;
         controller = FindObjectOfType<GameController>();
         GiriJumpPoint.transform.parent = null;
-        speed = ThisSpeed+controller.StageSpeed;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        speed = ThisSpeed + controller.StageSpeed;
         if (GiriJumpPoint!=null)
         {
             GiriJumpPoint.transform.position = this.transform.position + GiriJumpPointPosition;

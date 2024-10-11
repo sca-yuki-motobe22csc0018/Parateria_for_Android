@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     public string GiriGiriJumpTag;
     private bool Jump;
     private bool GiriGiri;
+    private float JumpCoolTime = 0.1f;
+    private float JumpCoolTimer;
 
     //Œ©‚½–ÚŠÖ˜A
     public GameObject PlayerSkin;
@@ -40,18 +42,24 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         Jump = false;
         GiriGiri = false;
+        JumpCoolTimer = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && thisJumpCount < MaxJumpCount)
+        if (Jump)
         {
-            rb.velocity = new Vector3(0, JumpForce, 0);
-            thisJumpCount++;
-            Rota = true;
-            Jump = true;
-            
+            JumpCoolTimer += Time.deltaTime;
+            if (JumpCoolTimer>JumpCoolTime)
+            {
+                JumpCoolTimer = 0;
+                Jump = false;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            JumpAction();
         }
         if (this.transform.position.x < DefaultPosition)
         {
@@ -92,18 +100,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        
         if (collision.gameObject.CompareTag(GiriJumpTag) && Jump)
         {
             if (GiriGiri)
             {
                 Debug.Log("ƒMƒŠƒMƒŠ");
-                Jump = false;
             }
             else
             {
                 Debug.Log("ƒMƒŠ");
-                Jump = false;
             }
             Destroy(collision.gameObject);
         }
@@ -135,6 +140,16 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag(GiriGiriJumpTag))
         {
             GiriGiri = false;
+        }
+    }
+    public void JumpAction()
+    {
+        if (thisJumpCount < MaxJumpCount)
+        {
+            rb.velocity = new Vector3(0, JumpForce, 0);
+            thisJumpCount++;
+            Rota = true;
+            Jump = true;
         }
     }
 }
