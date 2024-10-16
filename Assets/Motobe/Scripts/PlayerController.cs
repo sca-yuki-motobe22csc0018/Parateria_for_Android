@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
@@ -34,6 +36,13 @@ public class PlayerController : MonoBehaviour
     private bool Rota;
     public string LinePrefab;
 
+    //“G‚Æ‚Ì”»’è“™
+    public string EnemyTag;
+    private bool DamageTrigger;
+    public SpriteRenderer DamageEffect;
+    public float DamageTime;
+    public float DamageColor;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +52,7 @@ public class PlayerController : MonoBehaviour
         Jump = false;
         GiriGiri = false;
         JumpCoolTimer = 0;
+        DamageTrigger = true;
     }
 
     // Update is called once per frame
@@ -55,6 +65,7 @@ public class PlayerController : MonoBehaviour
             {
                 JumpCoolTimer = 0;
                 Jump = false;
+                DamageTrigger=true;
             }
         }
         if (Input.GetKeyDown(KeyCode.Space))
@@ -78,6 +89,7 @@ public class PlayerController : MonoBehaviour
             this.transform.position+=new Vector3(0,StartPositionY,0);
         }
         Line();
+
     }
 
     private void Line()
@@ -110,6 +122,7 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("ƒMƒŠ");
             }
+            DamageTrigger = false;
             Destroy(collision.gameObject);
         }
         
@@ -124,6 +137,14 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag(WallTag))
         {
             onWall = true;
+        }
+        if (collision.gameObject.CompareTag(EnemyTag))
+        {
+            if (DamageTrigger)
+            {
+                Damage();
+                Destroy(collision.gameObject);
+            }
         }
     }
 
@@ -151,5 +172,16 @@ public class PlayerController : MonoBehaviour
             Rota = true;
             Jump = true;
         }
+    }
+
+    void Damage()
+    {
+        var sequence = DOTween.Sequence();
+        sequence.Append(DamageEffect.DOFade(DamageColor, DamageTime));
+        sequence.Append(DamageEffect.DOFade(0, DamageTime));
+        sequence.Append(DamageEffect.DOFade(DamageColor, DamageTime));
+        sequence.Append(DamageEffect.DOFade(0, DamageTime));
+        sequence.Append(DamageEffect.DOFade(DamageColor, DamageTime));
+        sequence.Append(DamageEffect.DOFade(0, DamageTime));
     }
 }

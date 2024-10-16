@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour
     private bool MoveStart;
     public string StartTag;
     public string FinishTag;
+    public GameObject thisCollider;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +38,14 @@ public class EnemyController : MonoBehaviour
         else
         {
             transform.position += new Vector3(-controller.StageSpeed * Time.deltaTime, 0, 0);
+        }
+        if (thisCollider != null)
+        {
+            thisCollider.transform.position = this.transform.position;
+        }
+        else
+        {
+            Destroy(GiriJumpPoint);
         }
     }
 
