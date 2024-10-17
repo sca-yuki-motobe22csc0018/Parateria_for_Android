@@ -39,9 +39,16 @@ public class PlayerController : MonoBehaviour
     //“G‚Æ‚Ì”»’è“™
     public string EnemyTag;
     private bool DamageTrigger;
+    public SpriteRenderer DamageEffectPlayer;
     public SpriteRenderer DamageEffect;
     public float DamageTime;
     public float DamageColor;
+
+    //HPŠÖ˜A
+    private int thisHP;
+    public int StartHP;
+    public int MAXHP;
+    public GameObject[] HPObject;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +60,15 @@ public class PlayerController : MonoBehaviour
         GiriGiri = false;
         JumpCoolTimer = 0;
         DamageTrigger = true;
+        thisHP=StartHP;
+        for (int i = 0; i < MAXHP; i++)
+        {
+            HPObject[i].SetActive(false);
+        }
+        for (int i=0;i<thisHP;i++)
+        {
+            HPObject[i].SetActive(true);
+        }
     }
 
     // Update is called once per frame
@@ -117,6 +133,7 @@ public class PlayerController : MonoBehaviour
             if (GiriGiri)
             {
                 Debug.Log("ƒMƒŠƒMƒŠ");
+                Heal();
             }
             else
             {
@@ -176,12 +193,32 @@ public class PlayerController : MonoBehaviour
 
     void Damage()
     {
+        thisHP--;
+        if (thisHP > 0)
+        {
+            HPObject[thisHP].SetActive(false);
+        }
         var sequence = DOTween.Sequence();
         sequence.Append(DamageEffect.DOFade(DamageColor, DamageTime));
         sequence.Append(DamageEffect.DOFade(0, DamageTime));
+        sequence.Join(DamageEffectPlayer.DOFade(DamageColor, DamageTime));
         sequence.Append(DamageEffect.DOFade(DamageColor, DamageTime));
+        sequence.Join(DamageEffectPlayer.DOFade(0, DamageTime));
         sequence.Append(DamageEffect.DOFade(0, DamageTime));
+        sequence.Join(DamageEffectPlayer.DOFade(DamageColor, DamageTime));
         sequence.Append(DamageEffect.DOFade(DamageColor, DamageTime));
+        sequence.Join(DamageEffectPlayer.DOFade(0, DamageTime));
         sequence.Append(DamageEffect.DOFade(0, DamageTime));
+        sequence.Join(DamageEffectPlayer.DOFade(DamageColor, DamageTime));
+        sequence.Append(DamageEffectPlayer.DOFade(0, DamageTime));
+    }
+
+    void Heal()
+    {
+        if (thisHP < MAXHP)
+        {
+            HPObject[thisHP].SetActive(true);
+            thisHP++;
+        }
     }
 }
