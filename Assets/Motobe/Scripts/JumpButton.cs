@@ -6,7 +6,7 @@ using static Unity.Collections.AllocatorManager;
 
 public class JumpButton : MonoBehaviour
 {
-    private Button button;
+    public Button button;
     PlayerController playerController;
     // Start is called before the first frame update
     void Start()

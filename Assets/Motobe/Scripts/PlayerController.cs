@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using Unity.VisualScripting;
+using static Unity.Collections.AllocatorManager;
 
 public class PlayerController : MonoBehaviour
 {
@@ -50,6 +52,8 @@ public class PlayerController : MonoBehaviour
     public int MAXHP;
     public GameObject[] HPObject;
 
+    public Button button;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +73,8 @@ public class PlayerController : MonoBehaviour
         {
             HPObject[i].SetActive(true);
         }
+        button = GetComponent<Button>();
+        button.onClick.AddListener(Click);
     }
 
     // Update is called once per frame
@@ -220,5 +226,10 @@ public class PlayerController : MonoBehaviour
             HPObject[thisHP].SetActive(true);
             thisHP++;
         }
+    }
+
+    public void Click()
+    {
+        JumpAction();
     }
 }
