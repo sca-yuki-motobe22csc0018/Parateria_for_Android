@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             HPObject[i].SetActive(true);
         }
-        button = GetComponent<Button>();
+        //button = GetComponent<Button>();
         button.onClick.AddListener(Click);
     }
 
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Rota)
         {
-            PlayerSkin.transform.Rotate(0,0,-RotaSpeed*Time.deltaTime);
+            PlayerSkin.transform.Rotate(0,0,-RotaSpeed/Time.timeScale*Time.deltaTime);
         }
         if (this.transform.position.y < EndPositionY)
         {

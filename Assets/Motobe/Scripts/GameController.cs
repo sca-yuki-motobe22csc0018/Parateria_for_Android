@@ -5,7 +5,9 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public float StageSpeed;
+    public float GameSpeed;
     public float PlusSpeed;
+    public float PlusGameSpeed;
     public float PlusTime;
     private float PlusTimer;
     public int PlusCount;
@@ -25,12 +27,14 @@ public class GameController : MonoBehaviour
         if (PlusCounter < PlusCount)
         {
             PlusTimer += Time.deltaTime;
-            if (PlusTimer > PlusTime)
+            if (PlusTimer > PlusTime*PlusCounter)
             {
                 PlusTimer = 0;
+                GameSpeed += PlusGameSpeed;
                 StageSpeed += PlusSpeed;
                 PlusCounter++;
             }
         }
+        Time.timeScale=GameSpeed;
     }
 }

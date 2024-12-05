@@ -6094,8 +6094,8 @@ MonoBehaviour:
   DamageEffect: {fileID: 276954907}
   DamageTime: 0.1
   DamageColor: 0.8
-  StartHP: 4
-  MAXHP: 5
+  StartHP: 2
+  MAXHP: 3
   HPObject:
   - {fileID: 1721381223}
   - {fileID: 1731832130}
@@ -6832,7 +6832,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StageSpeed: 8
-  PlusSpeed: 1
+  GameSpeed: 1
+  PlusSpeed: 0.5
+  PlusGameSpeed: 0.2
   PlusTime: 20
   PlusCount: 6
   JumpButton: {fileID: 579424609}
