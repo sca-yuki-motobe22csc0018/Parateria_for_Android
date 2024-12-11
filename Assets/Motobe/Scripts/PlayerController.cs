@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Unity.VisualScripting;
-using static Unity.Collections.AllocatorManager;
 
 public class PlayerController : MonoBehaviour
 {
@@ -31,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private bool GiriGiri;
     private float JumpCoolTime = 0.1f;
     private float JumpCoolTimer;
+    public Button button;
 
     //見た目関連
     public GameObject PlayerSkin;
@@ -52,11 +49,17 @@ public class PlayerController : MonoBehaviour
     public int MAXHP;
     public GameObject[] HPObject;
 
-    public Button button;
+    //フィーバー関連
+    private bool fever;
+    private int feverCount;
+    public int feverMax;
+    //public GameObject[] feverCountObj;
 
     // Start is called before the first frame update
     void Start()
     {
+        fever = false;
+        feverCount = 0;
         onWall = false;
         Rota=true;
         rb = GetComponent<Rigidbody2D>();
@@ -73,7 +76,6 @@ public class PlayerController : MonoBehaviour
         {
             HPObject[i].SetActive(true);
         }
-        //button = GetComponent<Button>();
         button.onClick.AddListener(Click);
     }
 
@@ -93,6 +95,15 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             JumpAction();
+        }
+        if (feverCount>=feverMax)
+        {
+            fever = true;
+        }
+        if (fever)
+        {
+            //fever = false;
+            //feverCount = 0;
         }
         if (this.transform.position.x < DefaultPosition)
         {
@@ -138,8 +149,11 @@ public class PlayerController : MonoBehaviour
         {
             if (GiriGiri)
             {
-                Debug.Log("ギリギリ");
-                Heal();
+                if (!fever)
+                {
+                    feverCount++;
+                }
+                Debug.Log(feverCount);
             }
             else
             {
