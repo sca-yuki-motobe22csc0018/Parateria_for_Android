@@ -153,11 +153,21 @@ public class PlayerController : MonoBehaviour
                 {
                     feverCount++;
                 }
+                if (ScoreCounter.nowScore<999999999)
+                {
+
+                    ScoreCounter.nowScore += 50 * ScoreCounter.plusScore;
+                }
                 Debug.Log(feverCount);
             }
             else
             {
                 Debug.Log("ƒMƒŠ");
+                if (ScoreCounter.nowScore < 999999999)
+                {
+
+                    ScoreCounter.nowScore += 10 * ScoreCounter.plusScore;
+                }
             }
             DamageTrigger = false;
             Destroy(collision.gameObject);
