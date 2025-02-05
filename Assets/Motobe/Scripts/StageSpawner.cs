@@ -27,7 +27,7 @@ public class StageSpawner : MonoBehaviour
             Rand -= stageProbability[i];
             if (Rand < 0)
             {
-                Stage(spawnPosition, i);
+                Stage(spawnPosition-new Vector3(10,0,0), i);
                 break;
             }
         }

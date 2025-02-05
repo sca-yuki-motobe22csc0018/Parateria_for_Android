@@ -1,0 +1,9 @@
+背景オブジェクト.png
+size:1161,532
+filter:Linear,Linear
+pma:true
+レイヤー 7 のコピー 3
+bounds:755,57,473,404
+rotate:90
+レイヤー 8
+bounds:2,2,751,528

@@ -141,6 +141,10 @@ public class PlayerController : MonoBehaviour
             Rota = false;
             Jump = false;
         }
+        if (collision.gameObject.CompareTag(StageTag) && onWall)
+        {
+            Debug.Log("a");
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -193,6 +197,7 @@ public class PlayerController : MonoBehaviour
                 Destroy(collision.gameObject);
             }
         }
+        
     }
 
     private void OnTriggerExit2D(Collider2D collision)
