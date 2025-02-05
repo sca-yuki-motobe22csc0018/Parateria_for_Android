@@ -13,7 +13,6 @@ public class StageSpawner : MonoBehaviour
     public float spawnPointY;
     public float spawnPointZ;
     public string RespawnTag;
-    public string LineTag;
     public string StagePrefab;
     void Start()
     {
@@ -27,7 +26,7 @@ public class StageSpawner : MonoBehaviour
             Rand -= stageProbability[i];
             if (Rand < 0)
             {
-                Stage(spawnPosition-new Vector3(10,0,0), i);
+                Stage(spawnPosition-new Vector3(5,0,0), i);
                 break;
             }
         }
@@ -52,10 +51,6 @@ public class StageSpawner : MonoBehaviour
                     break;
                 }
             }
-            Destroy(collision.gameObject);
-        }
-        if (collision.gameObject.CompareTag(LineTag))
-        {
             Destroy(collision.gameObject);
         }
     }

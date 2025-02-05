@@ -12,18 +12,28 @@ public class GameController : MonoBehaviour
     private float PlusTimer;
     public int PlusCount;
     private int PlusCounter;
-   // public GameObject JumpButton;
+    float cloudTimer;
+    float startX = 30;
+    float MaxY = 11;
+    float minY = 0;
+    // public GameObject JumpButton;
     // Start is called before the first frame update
     void Start()
     {
         PlusTimer = 0;
         PlusCounter = 0;
-        //JumpButton.SetActive(true);
+        cloudTimer = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        cloudTimer += Time.deltaTime;
+        if (cloudTimer > 3.0f)
+        {
+            Cloud();
+            cloudTimer = 0;
+        }
         if (PlusCounter < PlusCount)
         {
             PlusTimer += Time.deltaTime;
@@ -36,5 +46,12 @@ public class GameController : MonoBehaviour
             }
         }
         Time.timeScale=GameSpeed;
+    }
+    private void Cloud()
+    {
+        GameObject Cloud_prefab = Resources.Load<GameObject>("Cloud");
+        float randY = Random.Range(minY, MaxY);
+        GameObject Cloud = Instantiate(Cloud_prefab, new Vector3(startX, randY, 0), Quaternion.identity);
+        Debug.Log(Cloud);
     }
 }

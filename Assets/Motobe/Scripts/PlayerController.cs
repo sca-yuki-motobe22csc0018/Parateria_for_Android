@@ -28,12 +28,14 @@ public class PlayerController : MonoBehaviour
     private float JumpCoolTime = 0.1f;
     private float JumpCoolTimer;
     public GameObject JumpButton;
+    public int[] GiriScoreSet;
+    private int GiriScore;
 
     //Œ©‚½–ÚŠÖ˜A
-    public GameObject PlayerSkin;
-    public float RotaSpeed;
-    private bool Rota;
-    public string LinePrefab;
+    public GameObject[] PlayerSkin;
+    public int num;
+    public static int charaNum;
+    //public string LinePrefab;
 
     //“G‚Æ‚Ì”»’è“™
     public string EnemyTag;
@@ -58,10 +60,10 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        charaNum = num;
         fever = false;
         feverCount = 0;
         onWall = false;
-        Rota=true;
         rb = GetComponent<Rigidbody2D>();
         Jump = false;
         GiriGiri = false;
@@ -72,6 +74,14 @@ public class PlayerController : MonoBehaviour
         {
             HPObject[i].SetActive(false);
         }
+
+        for (int i = 0; i < 3; i++)
+        {
+            PlayerSkin[i].SetActive(false);
+        }
+        PlayerSkin[charaNum].SetActive(true);
+        GiriScore = GiriScoreSet[charaNum];
+
         for (int i=0;i<thisHP;i++)
         {
             HPObject[i].SetActive(true);
@@ -135,32 +145,26 @@ public class PlayerController : MonoBehaviour
         {
             this.transform.position -= new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
         }
-        if (Rota)
-        {
-            PlayerSkin.transform.Rotate(0,0,-RotaSpeed/Time.timeScale*Time.deltaTime);
-        }
         if (this.transform.position.y < EndPositionY)
         {
             this.transform.position+=new Vector3(0,StartPositionY,0);
         }
-        Line();
+        //Line();
 
     }
-
+    /*
     private void Line()
     {
         GameObject Stage_prefab = Resources.Load<GameObject>(LinePrefab);
         GameObject Stage = Instantiate(Stage_prefab, this.transform.position, Quaternion.identity);
         return;
     }
-
+    */
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(StageTag)&&!onWall)
         {
             thisJumpCount = 0;
-            PlayerSkin.transform.rotation = Quaternion.identity;
-            Rota = false;
             Jump = false;
         }
         if (collision.gameObject.CompareTag(StageTag) && onWall)
@@ -182,7 +186,7 @@ public class PlayerController : MonoBehaviour
                 if (ScoreCounter.nowScore<999999999)
                 {
 
-                    ScoreCounter.nowScore += 50 * ScoreCounter.plusScore;
+                    ScoreCounter.nowScore += GiriScore * ScoreCounter.plusScore;
                 }
                 Debug.Log(feverCount);
             }
@@ -243,7 +247,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector3(0, JumpForce, 0);
             thisJumpCount++;
-            Rota = true;
             Jump = true;
         }
     }
@@ -281,3 +284,5 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
+
+
