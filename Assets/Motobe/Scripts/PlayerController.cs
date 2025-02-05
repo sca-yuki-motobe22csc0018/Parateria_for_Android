@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     private bool GiriGiri;
     private float JumpCoolTime = 0.1f;
     private float JumpCoolTimer;
-    public Button button;
+    public GameObject JumpButton;
 
     //見た目関連
     public GameObject PlayerSkin;
@@ -76,12 +76,34 @@ public class PlayerController : MonoBehaviour
         {
             HPObject[i].SetActive(true);
         }
-        button.onClick.AddListener(Click);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                // タッチ座標をワールド座標に変換
+                Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 0f));
+
+                // Raycastを飛ばす
+                RaycastHit2D hit = Physics2D.Raycast(touchPosition, Vector2.zero);
+
+                if (hit.collider != null)
+                {
+                    Debug.Log("タッチしたオブジェクト: " + hit.collider.gameObject.name);
+                }
+                if (hit.collider.gameObject == JumpButton)
+                {
+                    JumpAction();
+                }
+            }
+        }
+
         if (Jump)
         {
             JumpCoolTimer += Time.deltaTime;
@@ -233,6 +255,8 @@ public class PlayerController : MonoBehaviour
         {
             HPObject[thisHP].SetActive(false);
         }
+
+        Handheld.Vibrate();
         var sequence = DOTween.Sequence();
         sequence.Append(DamageEffect.DOFade(DamageColor, DamageTime));
         sequence.Append(DamageEffect.DOFade(0, DamageTime));
@@ -255,10 +279,5 @@ public class PlayerController : MonoBehaviour
             HPObject[thisHP].SetActive(true);
             thisHP++;
         }
-    }
-
-    public void Click()
-    {
-        JumpAction();
     }
 }
