@@ -12,13 +12,13 @@ public class GameController : MonoBehaviour
     private float PlusTimer;
     public int PlusCount;
     private int PlusCounter;
-    public GameObject JumpButton;
+   // public GameObject JumpButton;
     // Start is called before the first frame update
     void Start()
     {
         PlusTimer = 0;
         PlusCounter = 0;
-        JumpButton.SetActive(true);
+        //JumpButton.SetActive(true);
     }
 
     // Update is called once per frame
