@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class HomeManager : MonoBehaviour
@@ -14,6 +15,10 @@ public class HomeManager : MonoBehaviour
 
     Vector2[] anchoredPoses;
     const float backCharaSize = 0.4f;
+    const float animTime = 0.75f;
+
+    [SerializeField] GameObject[] sortObjs;
+    [SerializeField] CharaIconChanger charaIcon;
 
     void Awake()
     {
@@ -77,12 +82,11 @@ public class HomeManager : MonoBehaviour
 
     public void OnDropChara(int _charaNum)
     {
-        Debug.Log(inputPos.x);
-        Debug.Log(outputPos.x);
         float dirLength = Mathf.Abs(inputPos.x - outputPos.x);
-        if (dirLength > 200)
+        if (dirLength > 100)
         {
-            if(inputPos.x > outputPos.x)
+            Debug.Log("drop");
+            if (inputPos.x > outputPos.x)
             {
                 //右側のキャラが前に来る
                 StartCoroutine(CharaMoveAnim(_charaNum, true));
@@ -94,30 +98,36 @@ public class HomeManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("失敗");
             charaRects[selectNum].anchoredPosition = anchoredPoses[0];
         }
     }
 
     IEnumerator CharaMoveAnim(int _charaNum, bool dir)
     {
-        int add = dir ? 1 : charas.Length - 1;
+        int add = dir ? charas.Length - 1 : 1;
+        int sortAdd = dir ? 1 : charas.Length - 1;
+        int sortPos = 0;
         for (int i = 0; i < charas.Length ; i++)
         {
-            int num = (_charaNum + i) % charas.Length;
-            charaRects[num].DOAnchorPos(anchoredPoses[(num + add) % charas.Length], 0.3f);
+            int num = (_charaNum + add + i) % charas.Length;
+            charaRects[num].DOAnchorPos(anchoredPoses[i], animTime);
+            charaRects[num].parent = sortObjs[sortPos].transform;
+            sortPos = (sortPos + sortAdd) % charas.Length;
+            Debug.Log($"{num}が{i}地点へ");
         }
 
-        charaFades[_charaNum].FadeOut(0.3f);
-        charaRects[_charaNum].DOScale(Vector2.one * backCharaSize, 0.3f);
+        charaFades[_charaNum].FadeOut(animTime/2);
+        charaRects[_charaNum].DOScale(Vector2.one * backCharaSize, animTime);
+        charas[_charaNum].GetComponent<Image>().raycastTarget = false;
 
-
-        int top = dir ? charas.Length - 1 : 1;
-        selectNum = (selectNum + top) % charas.Length;
-        Debug.Log(selectNum);
-        charaFades[selectNum].FadeIn(0.3f);
-        charaRects[selectNum].DOScale(Vector2.one, 0.3f);
+        selectNum = (selectNum + add) % charas.Length;
+        charaFades[selectNum].FadeIn(animTime/2);
+        charaRects[selectNum].DOScale(Vector2.one, animTime);
         inputPos = Vector2.zero;
-        yield return new WaitForSeconds(0.3f);
+        StartCoroutine(charaIcon.IconChange(selectNum,dir));
+        yield return new WaitForSeconds(animTime);
+        charas[selectNum].GetComponent<Image>().raycastTarget = true;
     }
 
     public void SceneChange(string _sceneName)
