@@ -1,0 +1,6 @@
+背景オブジェクト.png
+size:345,436
+filter:Linear,Linear
+pma:true
+フォルダー 1 2 のコピー 2
+bounds:2,2,341,432
