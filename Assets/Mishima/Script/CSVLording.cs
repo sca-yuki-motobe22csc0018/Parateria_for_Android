@@ -118,6 +118,6 @@ public class CSVLording : MonoBehaviour
 
         // **CSVのデータをセット**
         nameText.text = data.name;
-        scoreText.text = $"{data.score}点";
+        scoreText.text = $"{data.score}";
     }
 }
