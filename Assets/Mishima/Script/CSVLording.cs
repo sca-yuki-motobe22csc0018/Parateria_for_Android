@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using System.Linq;
+
 public class CSVLording : MonoBehaviour
 {
     [SerializeField] private GameObject[] rankObjects;  // 1〜10位のオブジェクト
@@ -22,7 +23,7 @@ public class CSVLording : MonoBehaviour
     {
         if (!File.Exists(filePath))
         {
-            Debug.LogError("CSVファイルが見つかりません！");
+            //Debug.LogError("CSVファイルが見つかりません！");
             return;
         }
 

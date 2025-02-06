@@ -20,17 +20,27 @@ public class HomeManager : MonoBehaviour
     [SerializeField] GameObject[] sortObjs;
     [SerializeField] CharaIconChanger charaIcon;
 
+    [SerializeField] GameObject[] shadows;
+    RectTransform[] shadowRects;
+    Vector2[] shadowAnchoredPoses;
+
     void Awake()
     {
         selectNum = 0;
         charaFades = new CharaFade[charas.Length];
         charaRects = new RectTransform[charas.Length];
         anchoredPoses = new Vector2[charas.Length];
+
+        shadowRects = new RectTransform[charas.Length];
+        shadowAnchoredPoses = new Vector2[charas.Length];
+
         for (int i = 0;i < charaFades.Length;i++)
         {
             charaFades[i] = charas[i].GetComponent<CharaFade>();
             charaRects[i] = charas[i].GetComponent<RectTransform>();
             anchoredPoses[i] = charaRects[i].anchoredPosition;
+            shadowRects[i] = shadows[i].GetComponent<RectTransform>();
+            shadowAnchoredPoses[i] = shadowRects[i].anchoredPosition;
         }
     }
 
@@ -66,6 +76,7 @@ public class HomeManager : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             charaRects[selectNum].position = new Vector2(outputPos.x, charaRects[selectNum].position.y);
+            shadowRects[selectNum].position = new Vector2(charaRects[selectNum].position.x, shadowRects[selectNum].position.y);
         }
 #else
     if (Input.touchCount > 0)
@@ -111,6 +122,9 @@ public class HomeManager : MonoBehaviour
         for (int i = 0; i < charas.Length ; i++)
         {
             int num = (_charaNum + add + i) % charas.Length;
+            shadowRects[num].DOAnchorPos(shadowAnchoredPoses[i],animTime);
+            shadowRects[num].parent = sortObjs[sortPos].transform;
+
             charaRects[num].DOAnchorPos(anchoredPoses[i], animTime);
             charaRects[num].parent = sortObjs[sortPos].transform;
             sortPos = (sortPos + sortAdd) % charas.Length;
@@ -119,11 +133,13 @@ public class HomeManager : MonoBehaviour
 
         charaFades[_charaNum].FadeOut(animTime/2);
         charaRects[_charaNum].DOScale(Vector2.one * backCharaSize, animTime);
+        shadowRects[_charaNum].DOScale(Vector2.one * backCharaSize, animTime);
         charas[_charaNum].GetComponent<Image>().raycastTarget = false;
 
         selectNum = (selectNum + add) % charas.Length;
         charaFades[selectNum].FadeIn(animTime/2);
         charaRects[selectNum].DOScale(Vector2.one, animTime);
+        shadowRects[selectNum].DOScale(Vector2.one, animTime);
         inputPos = Vector2.zero;
         StartCoroutine(charaIcon.IconChange(selectNum,dir));
         yield return new WaitForSeconds(animTime);
