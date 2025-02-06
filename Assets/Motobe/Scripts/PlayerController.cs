@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
 
     //見た目関連
     public GameObject[] PlayerSkin;
+    public GameObject[] PlayerIcon;
     public int num;
     public static int charaNum;
     //public string LinePrefab;
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
     public int StartHP;
     public int MAXHP;
     public GameObject[] HPObject;
+    public string HealTag;
 
     //フィーバー関連
     private bool fever;
@@ -78,42 +80,24 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             PlayerSkin[i].SetActive(false);
+            PlayerIcon[i].SetActive(false);
         }
         PlayerSkin[charaNum].SetActive(true);
+        PlayerIcon[charaNum].SetActive(true);
         GiriScore = GiriScoreSet[charaNum];
 
         for (int i=0;i<thisHP;i++)
         {
             HPObject[i].SetActive(true);
         }
+        var sequence = DOTween.Sequence();
+        sequence.Append(DamageEffect.DOFade(1, 0));
+        sequence.Append(DamageEffect.DOFade(0, DamageTime*8));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Began)
-            {
-                // タッチ座標をワールド座標に変換
-                Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 0f));
-
-                // Raycastを飛ばす
-                RaycastHit2D hit = Physics2D.Raycast(touchPosition, Vector2.zero);
-
-                if (hit.collider != null)
-                {
-                    Debug.Log("タッチしたオブジェクト: " + hit.collider.gameObject.name);
-                }
-                if (hit.collider.gameObject == JumpButton)
-                {
-                    JumpAction();
-                }
-            }
-        }
-
         if (Jump)
         {
             JumpCoolTimer += Time.deltaTime;
@@ -147,19 +131,18 @@ public class PlayerController : MonoBehaviour
         }
         if (this.transform.position.y < EndPositionY)
         {
-            this.transform.position+=new Vector3(0,StartPositionY,0);
+            for (int i = 0; i < MAXHP; i++)
+            {
+                HPObject[i].SetActive(false);
+            }
+            thisHP = 0;
+            Damage();
         }
-        //Line();
+        if (thisHP <= 0)
+        {
 
+        }
     }
-    /*
-    private void Line()
-    {
-        GameObject Stage_prefab = Resources.Load<GameObject>(LinePrefab);
-        GameObject Stage = Instantiate(Stage_prefab, this.transform.position, Quaternion.identity);
-        return;
-    }
-    */
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(StageTag)&&!onWall)
@@ -169,7 +152,12 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag(StageTag) && onWall)
         {
-            Debug.Log("a");
+            for (int i = 0; i < MAXHP; i++)
+            {
+                HPObject[i].SetActive(false);
+            }
+            thisHP = 0;
+            Damage();
         }
     }
 
@@ -207,6 +195,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.CompareTag(HealTag))
+        {
+            Heal();
+            Destroy(collision.gameObject);
+        }
         if (collision.gameObject.CompareTag(GiriGiriJumpTag))
         {
             GiriGiri = true;
@@ -254,7 +247,7 @@ public class PlayerController : MonoBehaviour
     void Damage()
     {
         thisHP--;
-        if (thisHP > 0)
+        if (thisHP >= 0)
         {
             HPObject[thisHP].SetActive(false);
         }
@@ -281,6 +274,11 @@ public class PlayerController : MonoBehaviour
         {
             HPObject[thisHP].SetActive(true);
             thisHP++;
+            if (ScoreCounter.nowScore < 999999999)
+            {
+
+                ScoreCounter.nowScore += GiriScore * ScoreCounter.plusScore;
+            }
         }
     }
 }

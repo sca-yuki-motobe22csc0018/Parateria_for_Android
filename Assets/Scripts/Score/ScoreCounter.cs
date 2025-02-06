@@ -28,50 +28,90 @@ public class ScoreCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        stageTimer += Time.deltaTime;
-        if (stageTimer > PlusTime) 
+        if (!GameController.gameEnd)
         {
-            if(PlusCounter < PlusCount)
+            stageTimer += Time.deltaTime;
+            if (stageTimer > PlusTime)
             {
-                plusScore *= 2;
-                PlusCounter++;
-            }
-            stageTimer = 0;
-        }
-        if (nowScore < 999999999)
-        {
-            nowScore += (int)(plusScore * Time.deltaTime);
-        }
-        if (nowScore == (int)scoreCounter)
-        {
-            previousScore = nowScore;
-        }
-        else
-        {
-            int difference = nowScore - previousScore;
-            scoreCounter += difference * Time.deltaTime / rotationTime;
-
-            if (difference > 0)
-            {
-                if (scoreCounter > nowScore)
+                if (PlusCounter < PlusCount)
                 {
-                    scoreCounter = nowScore;
+                    plusScore *= 2;
+                    PlusCounter++;
                 }
+                stageTimer = 0;
+            }
+            if (nowScore < 999999999)
+            {
+                nowScore += (int)(plusScore * Time.deltaTime);
+            }
+            if (nowScore == (int)scoreCounter)
+            {
+                previousScore = nowScore;
             }
             else
             {
-                if (scoreCounter < nowScore)
-                {
-                    scoreCounter = nowScore;
-                }
-            }
+                int difference = nowScore - previousScore;
+                scoreCounter += difference * Time.deltaTime / rotationTime;
 
-            if (nowScore == scoreCounter)
-            {
+                if (difference > 0)
+                {
+                    if (scoreCounter > nowScore)
+                    {
+                        scoreCounter = nowScore;
+                    }
+                }
+                else
+                {
+                    if (scoreCounter < nowScore)
+                    {
+                        scoreCounter = nowScore;
+                    }
+                }
+
+                if (nowScore == scoreCounter)
+                {
+                    for (int i = 0; i < 9; i++)
+                    {
+                        int a = (nowScore / (int)Mathf.Pow(10, i)) % 10;
+                        scoreDigits[i].anchoredPosition = new Vector2(0, a * 100);
+                    }
+                    if (scoreCounter < 100000000)
+                    {
+                        scoreDigits[8].anchoredPosition = new Vector2(0, -200);
+                    }
+                    if (scoreCounter < 10000000)
+                    {
+                        scoreDigits[7].anchoredPosition = new Vector2(0, -200);
+                    }
+                    if (scoreCounter < 1000000)
+                    {
+                        scoreDigits[6].anchoredPosition = new Vector2(0, -200);
+                    }
+                    if (scoreCounter < 100000)
+                    {
+                        scoreDigits[5].anchoredPosition = new Vector2(0, -200);
+                    }
+                    if (scoreCounter < 10000)
+                    {
+                        scoreDigits[4].anchoredPosition = new Vector2(0, -200);
+                    }
+                    if (scoreCounter < 1000)
+                    {
+                        scoreDigits[3].anchoredPosition = new Vector2(0, -200);
+                    }
+                    if (scoreCounter < 100)
+                    {
+                        scoreDigits[2].anchoredPosition = new Vector2(0, -200);
+                    }
+                    if (scoreCounter < 10)
+                    {
+                        scoreDigits[1].anchoredPosition = new Vector2(0, -200);
+                    }
+                    return;
+                }
                 for (int i = 0; i < 9; i++)
                 {
-                    int a = (nowScore / (int)Mathf.Pow(10, i)) % 10;
-                    scoreDigits[i].anchoredPosition = new Vector2(0, a * 100);
+                    scoreDigits[i].anchoredPosition = new Vector2(0, (scoreCounter / (int)Mathf.Pow(10, i)) % 10 * 100);
                 }
                 if (scoreCounter < 100000000)
                 {
@@ -105,43 +145,6 @@ public class ScoreCounter : MonoBehaviour
                 {
                     scoreDigits[1].anchoredPosition = new Vector2(0, -200);
                 }
-                return;
-            }
-            for (int i = 0; i < 9; i++)
-            {
-                scoreDigits[i].anchoredPosition = new Vector2(0, (scoreCounter / (int)Mathf.Pow(10, i)) % 10 * 100);
-            }
-            if (scoreCounter < 100000000)
-            {
-                scoreDigits[8].anchoredPosition = new Vector2(0, -200);
-            }
-            if (scoreCounter < 10000000)
-            {
-                scoreDigits[7].anchoredPosition = new Vector2(0, -200);
-            }
-            if (scoreCounter < 1000000)
-            {
-                scoreDigits[6].anchoredPosition = new Vector2(0, -200);
-            }
-            if (scoreCounter < 100000)
-            {
-                scoreDigits[5].anchoredPosition = new Vector2(0, -200);
-            }
-            if (scoreCounter < 10000)
-            {
-                scoreDigits[4].anchoredPosition = new Vector2(0, -200);
-            }
-            if (scoreCounter < 1000)
-            {
-                scoreDigits[3].anchoredPosition = new Vector2(0, -200);
-            }
-            if (scoreCounter < 100)
-            {
-                scoreDigits[2].anchoredPosition = new Vector2(0, -200);
-            }
-            if (scoreCounter < 10)
-            {
-                scoreDigits[1].anchoredPosition = new Vector2(0, -200);
             }
         }
     }
