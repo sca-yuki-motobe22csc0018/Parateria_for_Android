@@ -931,7 +931,6 @@ MonoBehaviour:
   nextPanel: {fileID: 2021129416}
   parentPanel: {fileID: 1472412714}
   imageDisplay: {fileID: 1415434020}
-  imageWaku: {fileID: 2118196676}
 --- !u!1 &681550271
 GameObject:
   m_ObjectHideFlags: 0
@@ -3277,9 +3276,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1472412718}
-        m_TargetAssemblyTypeName: inputfield, Assembly-CSharp
-        m_MethodName: OnButtonClick
+      - m_Target: {fileID: 648826236}
+        m_TargetAssemblyTypeName: Rename, Assembly-CSharp
+        m_MethodName: OnSubmit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3773,17 +3772,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2be50d8f5e5014684f2cc6aa33792a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rankingPanel: {fileID: 804516275}
-  rank1: {fileID: 1937130438}
-  rank2: {fileID: 848256423}
-  rank3: {fileID: 364335945}
-  rank4: {fileID: 1645936093}
-  rank5: {fileID: 1441015043}
-  rank6: {fileID: 759258075}
-  rank7: {fileID: 727416879}
-  rank8: {fileID: 559076217}
-  rank9: {fileID: 7276102}
-  rank10: {fileID: 1405790941}
+  rankObjects:
+  - {fileID: 1937130438}
+  - {fileID: 848256423}
+  - {fileID: 364335945}
+  - {fileID: 1645936093}
+  - {fileID: 1441015043}
+  - {fileID: 759258075}
+  - {fileID: 727416879}
+  - {fileID: 559076217}
+  - {fileID: 7276102}
+  - {fileID: 1405790941}
 --- !u!1 &2061267185
 GameObject:
   m_ObjectHideFlags: 0
