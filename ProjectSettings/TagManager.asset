@@ -11,6 +11,7 @@ TagManager:
   - GiriGiriJumpPoint
   - EnemyStart
   - LineStock
+  - Heal
   layers:
   - Default
   - TransparentFX

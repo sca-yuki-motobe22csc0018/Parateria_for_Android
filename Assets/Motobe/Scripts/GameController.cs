@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     float startX = 30;
     float MaxY = 11;
     float minY = 0;
+    public static bool gameEnd;
     // public GameObject JumpButton;
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
         PlusTimer = 0;
         PlusCounter = 0;
         cloudTimer = 0;
+        gameEnd = false;
     }
 
     // Update is called once per frame
