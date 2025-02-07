@@ -9,6 +9,7 @@ public class PlayerData : MonoBehaviour
 {
     public int charaNumber { get; private set;}
     public int score { get; private set; }
+    public bool titleToRanking { get; private set; }
 
     const int rankings = 10;
 
@@ -34,6 +35,11 @@ public class PlayerData : MonoBehaviour
     public void SetCharaNumber(int _num)
     {
         charaNumber = _num;
+    }
+
+    public void TitleToRanking(bool _chack)
+    {
+        titleToRanking = _chack;
     }
 
     public void SetScore(int _score)

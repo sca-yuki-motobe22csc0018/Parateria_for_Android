@@ -34,6 +34,7 @@ public class Rename : MonoBehaviour
         {
             File.WriteAllText(filePath, "名前,スコア\n");
         }
+        if(Locator<PlayerData>.Instance.titleToRanking) OnYesButtonClick();
     }
 
     private void OnInputEndEdit(string text)
@@ -81,4 +82,5 @@ public class Rename : MonoBehaviour
         string newEntry = $"{playerName},{Locator<PlayerData>.Instance.score}\n";
         File.AppendAllText(filePath, newEntry);
     }
+    
 }
