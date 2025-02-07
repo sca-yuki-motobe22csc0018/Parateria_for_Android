@@ -154,6 +154,7 @@ public class HomeManager : MonoBehaviour
     IEnumerator SceneChangeAnim(string _sceneName)
     {
         yield return null;
+        Locator<PlayerData>.Instance.SetCharaNumber(selectNum);
         SceneManager.LoadScene(_sceneName);
     }
 }

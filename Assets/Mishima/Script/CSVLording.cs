@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.IO;
 using System.Linq;
 
@@ -13,17 +14,19 @@ public class CSVLording : MonoBehaviour
 
     void Start()
     {
-        filePath = Path.Combine(Application.persistentDataPath, "ranking.csv");
+        //filePath = Path.Combine(Application.persistentDataPath, "ranking.csv");
+        filePath = Path.Combine(Application.dataPath, "Resources/ranking.csv");
         LoadCSV();
         SortRanking();
         DisplayRanking();
+
     }
 
     private void LoadCSV()
     {
         if (!File.Exists(filePath))
         {
-            //Debug.LogError("CSVファイルが見つかりません！");
+            Debug.LogError("CSVファイルが見つかりません！");
             return;
         }
 
@@ -55,6 +58,7 @@ public class CSVLording : MonoBehaviour
     {
         for (int i = 0; i < rankObjects.Length && i < rankingData.Count; i++)
         {
+            Debug.Log(rankingData[i]);
             SetRankData(rankObjects[i], rankingData[i]);
         }
     }
