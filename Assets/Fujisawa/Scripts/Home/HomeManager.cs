@@ -155,6 +155,8 @@ public class HomeManager : MonoBehaviour
     {
         yield return null;
         Locator<PlayerData>.Instance.SetCharaNumber(selectNum);
+        if(_sceneName == "Ranking") Locator<PlayerData>.Instance.TitleToRanking(true);
+        else Locator<PlayerData>.Instance.TitleToRanking(false);
         SceneManager.LoadScene(_sceneName);
     }
 }
