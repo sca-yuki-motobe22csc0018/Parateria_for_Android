@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ScoreCounter : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class ScoreCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (!GameController.gameEnd)
         {
             stageTimer += Time.deltaTime;
@@ -43,6 +45,10 @@ public class ScoreCounter : MonoBehaviour
             if (nowScore < 999999999)
             {
                 nowScore += (int)(plusScore * Time.deltaTime);
+            }
+            if (nowScore > 999999999)
+            {
+                nowScore = 999999999;
             }
             if (nowScore == (int)scoreCounter)
             {
@@ -147,5 +153,14 @@ public class ScoreCounter : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            SceneChange();
+        }
+    }
+
+    void SceneChange()
+    {
+        SceneManager.LoadScene("Ranking");
     }
 }

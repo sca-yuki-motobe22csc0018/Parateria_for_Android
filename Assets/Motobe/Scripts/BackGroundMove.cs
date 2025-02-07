@@ -16,10 +16,14 @@ public class BackGroundMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.x < MaxX)
+        if (!GameController.gameEnd)
         {
-            transform.position = new Vector3(RespawnX, -3.25f, 0);
+            if (transform.position.x < MaxX)
+            {
+                transform.position = new Vector3(RespawnX, -3.25f, 0);
+            }
+            transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
         }
-        transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
+            
     }
 }
