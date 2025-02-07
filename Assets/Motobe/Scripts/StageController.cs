@@ -39,7 +39,11 @@ public class StageController : MonoBehaviour
     }
     void Update()
     {
-        speed = controller.StageSpeed;
-        transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+        if (!GameController.gameEnd)
+        {
+
+            speed = controller.StageSpeed;
+            transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+        }
     }
 }

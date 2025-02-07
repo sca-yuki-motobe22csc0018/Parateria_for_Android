@@ -20,7 +20,6 @@ public class EnemyController : MonoBehaviour
         MoveStart = false;
         controller = FindObjectOfType<GameController>();
         GiriJumpPoint.transform.parent = null;
-        
     }
 
     // Update is called once per frame

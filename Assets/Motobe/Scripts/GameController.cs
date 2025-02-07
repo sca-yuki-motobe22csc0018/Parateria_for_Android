@@ -25,29 +25,37 @@ public class GameController : MonoBehaviour
         PlusCounter = 0;
         cloudTimer = 0;
         gameEnd = false;
+        if (PlayerController.charaNum == 2)
+        {
+            StageSpeed -= 3;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        cloudTimer += Time.deltaTime;
-        if (cloudTimer > 3.0f)
+        if (!gameEnd)
         {
-            Cloud();
-            cloudTimer = 0;
-        }
-        if (PlusCounter < PlusCount)
-        {
-            PlusTimer += Time.deltaTime;
-            if (PlusTimer > PlusTime*PlusCounter)
+            cloudTimer += Time.deltaTime;
+            if (cloudTimer > 3.0f)
             {
-                PlusTimer = 0;
-                GameSpeed += PlusGameSpeed;
-                StageSpeed += PlusSpeed;
-                PlusCounter++;
+                Cloud();
+                cloudTimer = 0;
             }
+            if (PlusCounter < PlusCount)
+            {
+                PlusTimer += Time.deltaTime;
+                if (PlusTimer > PlusTime * PlusCounter)
+                {
+                    PlusTimer = 0;
+                    GameSpeed += PlusGameSpeed;
+                    StageSpeed += PlusSpeed;
+                    PlusCounter++;
+                }
+            }
+            Time.timeScale = GameSpeed;
         }
-        Time.timeScale=GameSpeed;
+        
     }
     private void Cloud()
     {

@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public GameObject[] PlayerIcon;
     public int num;
     public static int charaNum;
+    public SpriteRenderer[] evaluation;
     //public string LinePrefab;
 
     //敵との判定等
@@ -52,9 +53,11 @@ public class PlayerController : MonoBehaviour
     public int MAXHP;
     public GameObject[] HPObject;
     public string HealTag;
+    public int[] HealScoreSet;
+    private int HealScore;
 
     //フィーバー関連
-    private bool fever;
+    public static bool fever;
     private int feverCount;
     public int feverMax;
     //public GameObject[] feverCountObj;
@@ -85,10 +88,20 @@ public class PlayerController : MonoBehaviour
         PlayerSkin[charaNum].SetActive(true);
         PlayerIcon[charaNum].SetActive(true);
         GiriScore = GiriScoreSet[charaNum];
+        HealScore = HealScoreSet[charaNum];
+        if (charaNum==2)
+        {
+            MaxJumpCount++;
+        }
 
         for (int i=0;i<thisHP;i++)
         {
             HPObject[i].SetActive(true);
+        }
+        for(int i=0; i < 2; i++)
+        {
+            var eva = DOTween.Sequence();
+            eva.Append(evaluation[i].DOFade(0, 0));
         }
         var sequence = DOTween.Sequence();
         sequence.Append(DamageEffect.DOFade(1, 0));
@@ -98,50 +111,53 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Jump)
-        {
-            JumpCoolTimer += Time.deltaTime;
-            if (JumpCoolTimer>JumpCoolTime)
+        if (!GameController.gameEnd)
+        { 
+            if (Jump)
             {
-                JumpCoolTimer = 0;
-                Jump = false;
-                DamageTrigger=true;
+                JumpCoolTimer += Time.deltaTime;
+                if (JumpCoolTimer > JumpCoolTime)
+                {
+                    JumpCoolTimer = 0;
+                    Jump = false;
+                    DamageTrigger = true;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                JumpAction();
+            }
+            if (feverCount >= feverMax)
+            {
+                fever = true;
+            }
+            if (fever)
+            {
+                
+            }
+            if (this.transform.position.x < DefaultPosition)
+            {
+                this.transform.position += new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
+            }
+            if (this.transform.position.x > DefaultPosition)
+            {
+                this.transform.position -= new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
+            }
+            if (this.transform.position.y < EndPositionY)
+            {
+                for (int i = 0; i < MAXHP; i++)
+                {
+                    HPObject[i].SetActive(false);
+                }
+                thisHP = 0;
+                Damage();
+            }
+            if (thisHP <= 0)
+            {
+                GameController.gameEnd = true;
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            JumpAction();
-        }
-        if (feverCount>=feverMax)
-        {
-            fever = true;
-        }
-        if (fever)
-        {
-            //fever = false;
-            //feverCount = 0;
-        }
-        if (this.transform.position.x < DefaultPosition)
-        {
-            this.transform.position += new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
-        }
-        if (this.transform.position.x > DefaultPosition)
-        {
-            this.transform.position -= new Vector3(PlayerSpeed * Time.deltaTime, 0, 0);
-        }
-        if (this.transform.position.y < EndPositionY)
-        {
-            for (int i = 0; i < MAXHP; i++)
-            {
-                HPObject[i].SetActive(false);
-            }
-            thisHP = 0;
-            Damage();
-        }
-        if (thisHP <= 0)
-        {
-
-        }
+        
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -173,19 +189,25 @@ public class PlayerController : MonoBehaviour
                 }
                 if (ScoreCounter.nowScore<999999999)
                 {
-
                     ScoreCounter.nowScore += GiriScore * ScoreCounter.plusScore;
                 }
+                var eva = DOTween.Sequence();
+                eva.Append(evaluation[1].DOFade(1, 0.2f));
+                eva.Append(evaluation[1].DOFade(1, 0.25f));
+                eva.Append(evaluation[1].DOFade(0, 0.2f));
                 Debug.Log(feverCount);
             }
             else
             {
-                Debug.Log("ギリ");
                 if (ScoreCounter.nowScore < 999999999)
                 {
 
                     ScoreCounter.nowScore += 10 * ScoreCounter.plusScore;
                 }
+                var eva = DOTween.Sequence();
+                eva.Append(evaluation[0].DOFade(1, 0.2f));
+                eva.Append(evaluation[0].DOFade(1, 0.25f));
+                eva.Append(evaluation[0].DOFade(0, 0.2f));
             }
             DamageTrigger = false;
             Destroy(collision.gameObject);
@@ -238,9 +260,12 @@ public class PlayerController : MonoBehaviour
     {
         if (thisJumpCount < MaxJumpCount)
         {
-            rb.velocity = new Vector3(0, JumpForce, 0);
-            thisJumpCount++;
-            Jump = true;
+            if (!GameController.gameEnd)
+            {
+                rb.velocity = new Vector3(0, JumpForce, 0);
+                thisJumpCount++;
+                Jump = true;
+            }
         }
     }
 
@@ -274,11 +299,16 @@ public class PlayerController : MonoBehaviour
         {
             HPObject[thisHP].SetActive(true);
             thisHP++;
-            if (ScoreCounter.nowScore < 999999999)
+            
+            if (charaNum == 1&& thisHP < MAXHP)
             {
-
-                ScoreCounter.nowScore += GiriScore * ScoreCounter.plusScore;
+                HPObject[thisHP].SetActive(true);
+                thisHP++;
             }
+        }
+        if (ScoreCounter.nowScore < 999999999)
+        {
+            ScoreCounter.nowScore += HealScore * ScoreCounter.plusScore;
         }
     }
 }

@@ -44,10 +44,13 @@ public class CloudMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.x < MaxX)
+        if (!GameController.gameEnd)
         {
-            Destroy(this.gameObject);
+            if (transform.position.x < MaxX)
+            {
+                Destroy(this.gameObject);
+            }
+            transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
         }
-        transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
     }
 }
