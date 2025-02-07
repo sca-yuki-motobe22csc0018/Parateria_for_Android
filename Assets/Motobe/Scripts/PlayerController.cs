@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public int num;
     public static int charaNum;
     public SpriteRenderer[] evaluation;
+    public static int st;
     //public string LinePrefab;
 
     //“G‚Æ‚Ì”»’è“™
@@ -60,12 +61,22 @@ public class PlayerController : MonoBehaviour
     public static bool fever;
     private int feverCount;
     public int feverMax;
+    
+
+    public enum State
+    {
+        run=1,
+        jump=2,
+        die=3
+    }
+    public State state;
     //public GameObject[] feverCountObj;
 
     // Start is called before the first frame update
     void Start()
     {
-        charaNum = num;
+        state = State.run;
+        charaNum = Locator<PlayerData>.Instance.charaNumber;
         fever = false;
         feverCount = 0;
         onWall = false;
@@ -111,6 +122,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (state == State.run)
+        {
+            st = 1;
+        }
+        if (state == State.jump)
+        {
+            st = 2;
+        }
+        if (state == State.die)
+        {
+            st = 3;
+        }
         if (!GameController.gameEnd)
         { 
             if (Jump)
@@ -155,6 +178,7 @@ public class PlayerController : MonoBehaviour
             if (thisHP <= 0)
             {
                 GameController.gameEnd = true;
+                state = State.die;
             }
         }
         
@@ -164,6 +188,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag(StageTag)&&!onWall)
         {
             thisJumpCount = 0;
+            state = State.run;
             Jump = false;
         }
         if (collision.gameObject.CompareTag(StageTag) && onWall)
@@ -265,6 +290,7 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = new Vector3(0, JumpForce, 0);
                 thisJumpCount++;
                 Jump = true;
+                state = State.jump;
             }
         }
     }

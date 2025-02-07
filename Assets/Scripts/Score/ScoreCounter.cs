@@ -161,6 +161,7 @@ public class ScoreCounter : MonoBehaviour
 
     void SceneChange()
     {
+        Locator<PlayerData>.Instance.SetScore(nowScore);
         SceneManager.LoadScene("Ranking");
     }
 }

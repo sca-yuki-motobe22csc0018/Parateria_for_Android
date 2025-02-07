@@ -15,12 +15,22 @@ public class PlayerData : MonoBehaviour
     private void OnEnable() => Locator<PlayerData>.Bind(this);
     private void OnDisable() => Locator<PlayerData>.Unbind(this);
 
-    void Awake()
-    {
+    public static PlayerData instance;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    
+
     public void SetCharaNumber(int _num)
     {
         charaNumber = _num;
