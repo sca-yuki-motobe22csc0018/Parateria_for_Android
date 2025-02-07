@@ -26,7 +26,8 @@ public class Rename : MonoBehaviour
         inputField.onEndEdit.AddListener(OnInputEndEdit);
 
         // 保存先を決定（書き込み可能なパス）
-        filePath = Path.Combine(Application.persistentDataPath, "ranking.csv");
+        //filePath = Path.Combine(Application.persistentDataPath, "ranking.csv");
+        filePath = Path.Combine(Application.dataPath, "Resources/ranking.csv");
 
         // CSVファイルがなければヘッダーを作成
         if (!File.Exists(filePath))
@@ -71,12 +72,13 @@ public class Rename : MonoBehaviour
 
         // CSVに名前を保存
         SaveToCSV(inputField.text);
+       // Locator<PlayerData>.Instance.RankChange(inputField.text,100);
     }
 
     private void SaveToCSV(string playerName)
     {
         // 仮のスコアを 0 として保存
-        string newEntry = $"{playerName},0\n";
+        string newEntry = $"{playerName},{Locator<PlayerData>.Instance.score}\n";
         File.AppendAllText(filePath, newEntry);
     }
 }
