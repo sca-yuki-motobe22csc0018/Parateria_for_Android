@@ -27,7 +27,7 @@ public class Rename : MonoBehaviour
 
         // 保存先を決定（書き込み可能なパス）
         //filePath = Path.Combine(Application.persistentDataPath, "ranking.csv");
-        filePath = Path.Combine(Application.dataPath, "Resources/ranking.csv");
+        filePath = Path.Combine(Application.persistentDataPath, "ranking.csv");
 
         // CSVファイルがなければヘッダーを作成
         if (!File.Exists(filePath))

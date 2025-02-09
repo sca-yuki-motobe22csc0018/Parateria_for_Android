@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,7 @@ public class ScoreCounter : MonoBehaviour
     public static int nowScore;
     private float scoreCounter;
     private int previousScore;
+    public SpriteRenderer DamageEffect;
     public int SetScore { set { nowScore = value; } }
     float stageTimer;
     public int plusScoreDefault;
@@ -18,9 +20,12 @@ public class ScoreCounter : MonoBehaviour
     public int PlusCount;
     private int PlusCounter;
     public int PlusTime;
+    private bool end;
     // Start is called before the first frame update
     void Start()
     {
+        end = false;
+        nowScore = 0;
         PlusCounter = 0;
         stageTimer = 0;
         plusScore = plusScoreDefault;
@@ -155,13 +160,25 @@ public class ScoreCounter : MonoBehaviour
         }
         else
         {
-            SceneChange();
+            if (!end)
+            {
+                Dead();
+                end = true;
+            }
         }
+    }
+
+    void Dead()
+    {
+        Locator<PlayerData>.Instance.SetScore(nowScore);
+        var sequence = DOTween.Sequence();
+        sequence.Append(DamageEffect.DOFade(0, 0.5f));
+        sequence.Append(DamageEffect.DOFade(1, 1.0f));
+        sequence.AppendCallback(() => SceneChange());
     }
 
     void SceneChange()
     {
-        Locator<PlayerData>.Instance.SetScore(nowScore);
         SceneManager.LoadScene("Ranking");
     }
 }

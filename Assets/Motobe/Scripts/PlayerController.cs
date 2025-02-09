@@ -61,7 +61,14 @@ public class PlayerController : MonoBehaviour
     public static bool fever;
     private int feverCount;
     public int feverMax;
-    
+    float feverTimer;
+    public GameObject feverBack;
+
+    public AudioClip Nice;
+    public AudioClip Excellent;
+    public AudioClip HealSound;
+    AudioSource audioSource;
+
 
     public enum State
     {
@@ -75,6 +82,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        feverBack.SetActive(false);
+        feverTimer = 0;
         state = State.run;
         charaNum = Locator<PlayerData>.Instance.charaNumber;
         fever = false;
@@ -156,7 +166,15 @@ public class PlayerController : MonoBehaviour
             }
             if (fever)
             {
-                
+                feverTimer += Time.deltaTime;
+                feverBack.SetActive(true);
+            }
+            if (feverTimer > 15)
+            {
+                fever = false;
+                feverBack.SetActive(false);
+                feverTimer = 0;
+                feverCount = 0;
             }
             if (this.transform.position.x < DefaultPosition)
             {
@@ -215,24 +233,32 @@ public class PlayerController : MonoBehaviour
                 if (ScoreCounter.nowScore<999999999)
                 {
                     ScoreCounter.nowScore += GiriScore * ScoreCounter.plusScore;
+                    if (fever&&charaNum==0)
+                    {
+                        ScoreCounter.nowScore += GiriScore * ScoreCounter.plusScore;
+                    }
                 }
                 var eva = DOTween.Sequence();
                 eva.Append(evaluation[1].DOFade(1, 0.2f));
                 eva.Append(evaluation[1].DOFade(1, 0.25f));
                 eva.Append(evaluation[1].DOFade(0, 0.2f));
-                Debug.Log(feverCount);
+                audioSource.PlayOneShot(Excellent);
             }
             else
             {
                 if (ScoreCounter.nowScore < 999999999)
                 {
-
-                    ScoreCounter.nowScore += 10 * ScoreCounter.plusScore;
+                    ScoreCounter.nowScore += 4 / GiriScore * ScoreCounter.plusScore;
+                    if (fever && charaNum == 0)
+                    {
+                        ScoreCounter.nowScore += GiriScore * ScoreCounter.plusScore;
+                    }
                 }
                 var eva = DOTween.Sequence();
                 eva.Append(evaluation[0].DOFade(1, 0.2f));
                 eva.Append(evaluation[0].DOFade(1, 0.25f));
                 eva.Append(evaluation[0].DOFade(0, 0.2f));
+                audioSource.PlayOneShot(Nice);
             }
             DamageTrigger = false;
             Destroy(collision.gameObject);
@@ -259,8 +285,16 @@ public class PlayerController : MonoBehaviour
         {
             if (DamageTrigger)
             {
-                Damage();
-                Destroy(collision.gameObject);
+                if(fever)
+                {
+                    Destroy(collision.gameObject);
+                }
+                else
+                {
+                    Damage();
+                    Destroy(collision.gameObject);
+                }
+                
             }
         }
         
@@ -335,7 +369,13 @@ public class PlayerController : MonoBehaviour
         if (ScoreCounter.nowScore < 999999999)
         {
             ScoreCounter.nowScore += HealScore * ScoreCounter.plusScore;
+            if (fever && charaNum == 1)
+            {
+                ScoreCounter.nowScore += HealScore * ScoreCounter.plusScore; 
+                ScoreCounter.nowScore += HealScore * ScoreCounter.plusScore;
+            }
         }
+        audioSource.PlayOneShot(HealSound);
     }
 }
 

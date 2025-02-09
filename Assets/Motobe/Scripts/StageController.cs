@@ -21,17 +21,67 @@ public class StageController : MonoBehaviour
             {
                 enemy[i].SetActive(false);
             }
-            int rand = Random.Range(0,4);
-            if (rand != 3)
+            int feverRandMax;
+            if (PlayerController.fever)
             {
-                enemy[rand].SetActive(true);
+                feverRandMax = 7;
+            }
+            else
+            {
+                feverRandMax = 30;
+            }
+            int rand = Random.Range(0,feverRandMax);
+            if (rand < 1)
+            {
+                enemy[0].SetActive(true);
+                enemy[1].SetActive(true);
+                enemy[2].SetActive(true);
+            }
+            else 
+            if (rand < 3)
+            {
+                enemy[1].SetActive(true);
+                enemy[2].SetActive(true);
+            }
+            else 
+            if (rand < 5)
+            {
+                enemy[0].SetActive(true);
+                enemy[2].SetActive(true);
+            }
+            else if (rand < 7)
+            {
+                enemy[0].SetActive(true);
+                enemy[1].SetActive(true);
+            }
+            else if (rand < 13)
+            {
+                enemy[0].SetActive(true);
+            }
+            else if (rand < 19)
+            {
+                enemy[1].SetActive(true);
+            }
+            else if(rand<25)
+            {
+                enemy[2].SetActive(true);
             }
         }
         for (int i = 0; i < 3; i++)
         {
             heal[i].SetActive(false);
         }
-        int randH = Random.Range(0, 30);
+        int feverRandMaxH;
+        if (PlayerController.charaNum == 1&& PlayerController.fever)
+        {
+            feverRandMaxH = 3;
+        }
+        else
+        {
+            feverRandMaxH = 30;
+        }
+        
+        int randH = Random.Range(0, feverRandMaxH);
         if (randH <3)
         {
             heal[randH].SetActive(true);

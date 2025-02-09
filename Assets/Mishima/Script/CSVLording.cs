@@ -15,7 +15,7 @@ public class CSVLording : MonoBehaviour
     void Start()
     {
         //filePath = Path.Combine(Application.persistentDataPath, "ranking.csv");
-        filePath = Path.Combine(Application.dataPath, "Resources/ranking.csv");
+        filePath = Path.Combine(Application.persistentDataPath, "ranking.csv");
         LoadCSV();
         SortRanking();
         DisplayRanking();

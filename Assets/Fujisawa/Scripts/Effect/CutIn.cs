@@ -51,11 +51,11 @@ public class CutIn : MonoBehaviour
         charaShadow.sprite = charaSprites[_charaNum];
         cutInBase.color = charaColor[_charaNum];
 
-        const float fadeAnim = 0.3f;
+        const float fadeAnim = 0.1f;
         cutInFades[0].rectTransform.DOAnchorPosY(300, fadeAnim);
         cutInFades[1].rectTransform.DOAnchorPosY(-300, fadeAnim);
         yield return new WaitForSeconds(fadeAnim);
-        const float animTime = 0.2f;
+        const float animTime = 0.1f;
         feverTexts[0].rectTransform.DOAnchorPosX(2000f, animTime);
         feverTexts[1].rectTransform.DOAnchorPosX(-2000f, animTime);
 
